@@ -80,7 +80,7 @@ def write_vocab(tokens, pmatrix, chars,write_file_name):
   for j in tqdm(range(len(pmatrix[0]))):
       new_tokens[tokens[j][0]] = {}
       for i in range(len(pmatrix)):
-          if pmatrix[i][j] != 0 and pmatrix[i][j] * total_tokens  > 0.01 * 0.1 * tokens[j][1]:
+          if pmatrix[i][j] != 0 and pmatrix[i][j] * total_tokens  > 0.0001 * 0.1 * tokens[j][1]:
               new_tokens[tokens[j][0]][chars[i][0]] = pmatrix[i][j] * total_tokens# * len(tokens[j][0])
 
 
