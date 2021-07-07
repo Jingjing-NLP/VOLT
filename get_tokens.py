@@ -1,5 +1,6 @@
 import os
 import sys
+from tqdm import tqdm
 from collections import OrderedDict
 
 
@@ -7,7 +8,9 @@ def read_tokens(path, tokens=None):
     with open(path, 'r') as sr:
          lines = sr.readlines()
          if tokens == None: tokens = {}
-         for line in lines:
+         total_lines = min(len(lines), 1000000)
+         for i in range(total_lines):
+             line = lines[i]
              items = line.split()
              for item in items:
                  if not item.endswith('@@'):
@@ -27,18 +30,25 @@ def read_merge_code(path, tokens):
     with open(path, 'r') as sr:
          lines = sr.readlines()
          merge_dict = OrderedDict()
-         for line in lines[1:]:
+         for line in tqdm(lines[1:]):
              merge = line.strip()
              items = merge.split(" ")
              token = "".join(items)
-             if not token.endswith('</w>'):
+             for split_token in tokens:
+                 merge_dict[merge] = 10
+                 if token in split_token:
+                     merge_dict[merge] += tokens[split_token]
+             '''if not token.endswith('</w>'):
                 token = token+"@@"
              if token in tokens:
                 merged_token.add(token)
                 merge_dict[merge] = tokens[token]
              else:
-                #print(merge)
-                merge_dict[merge] = 10
+                 #continue
+                 #print(merge)
+                 merge_dict[merge] = 10'''
+
+    #print(len(merge_dict), len(tokens))
     return merge_dict
 
 

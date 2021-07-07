@@ -8,6 +8,7 @@ def read(path, dicts={}):
         #total_lines = 1000000
         #read_line = 0
         lines = sr.readlines()
+        #total_lines = len(lines) 
         total_lines = min(len(lines), 1000000)
         for line_number in tqdm(range(total_lines)):
             #line = sr.readline()

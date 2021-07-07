@@ -373,7 +373,7 @@ def sinkhorn_knopp(a, b, M, reg, numItermax=1000,
                 or np.any(np.isinf(u)) or np.any(np.isinf(v))):
             # we have reached the machine precision
             # come back to previous solution and quit loop
-            print('Warning: numerical errors at iteration', cpt)
+            #print('Warning: numerical errors at iteration', cpt)
             u = uprev
             v = vprev
             break
@@ -1144,14 +1144,28 @@ def sinkhorn_epsilon_scaling(a, b, M, reg, numItermax=100, epsilon0=1e4,
             loop = False
 
         cpt = cpt + 1
-    # print('err=',err,' cpt=',cpt)
+    
+
     if log:
+        return G#u.reshape((-1, 1)) * K * v.reshape((1, -1)), log
+    else:
+        p_matrix = G#u.reshape((-1, 1)) * K * v.reshape((1, -1))
+        sum1 = 0
+        
+        for item in p_matrix:
+            for word in item:
+                #print(word)
+                sum1 += word #* math.log(1+float(word))
+        return sum1, G#u.reshape((-1, 1)) * K * v.reshape((1, -1)) #sum1
+
+
+    '''if log:
         log['alpha'] = alpha
         log['beta'] = beta
         log['warmstart'] = (log['alpha'], log['beta'])
         return G, log
     else:
-        return G
+        return G'''
 
 
 def geometricBar(weights, alldistribT):

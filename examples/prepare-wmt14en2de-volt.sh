@@ -121,7 +121,7 @@ for l in $src $tgt; do
 done
 
 
-echo "#version: 0.2" >> $BPE_CODE
+echo "#version: 0.2" > $BPE_CODE
 cat $2 >> $BPE_CODE
 #$BPE_CODE=$4
 for L in $src $tgt; do
