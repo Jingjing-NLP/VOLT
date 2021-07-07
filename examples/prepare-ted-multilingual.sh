@@ -1,7 +1,11 @@
 #!/bin/bash
 # Adapted from https://github.com/facebookresearch/MIXER/blob/master/prepareData.sh
 
-cd $(dirname $0)
+cd ../POT
+python3 -m pip install --force-reinstall --editable ./ -i https://pypi.doubanio.com/simple --user
+
+cd ../examples
+
 
 echo 'Cloning Moses github repository (for tokenization scripts)...'
 SCRIPTS=../mosesdecoder/scripts

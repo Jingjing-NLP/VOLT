@@ -4,16 +4,26 @@ from tqdm import tqdm
 from collections import OrderedDict
 
 
-def read_tokens(path, tokens=None):
+def read_tokens(path, tokens={}, max_number_line=1e7, special_tokens="@@"):
+    """
+    Get all tokens and their frequencies. 
+    Arguments:
+       path (str): the path of the specific file
+       tokens (dict): the target dict storing tokens and their frequency
+       max_number_line (int): we set the maximum number of lines to 1e7
+       special_tokens (str): the tokens added by tokenization approaches
+    Returns:
+       tokens: return all tokens and their frequencies
+    """
     with open(path, 'r') as sr:
          lines = sr.readlines()
-         if tokens == None: tokens = {}
-         total_lines = min(len(lines), 1000000)
+         total_lines = min(len(lines), max_number_line)
+         total_lines = int(total_lines)
          for i in range(total_lines):
              line = lines[i]
              items = line.split()
              for item in items:
-                 if not item.endswith('@@'):
+                 if not item.endswith(special_tokens):
                         if item+"</w>" not in tokens:
                              tokens[item+"</w>"] = 1
                         else:
@@ -25,42 +35,43 @@ def read_tokens(path, tokens=None):
                            tokens[item] += 1
     return tokens
 
-def read_merge_code(path, tokens):
-    merged_token = set([])
+
+def read_merge_code_frequency(path, tokens, min_number=10):
+    """
+    Get all code segmentations and their frequencies. Here we take BPE-generated code segmentations as token candidates. We usually sample a large BPE size, e.g., 3,0000. 
+    Arguments:
+       path (str): the path to the generated code. We take the segment merged by the generated codes as candidates.
+       tokens (str): the dict storing tokens and their frequency. It is used to count the code frequency. 
+       min_number (int): the minimum number of code frequency.
+    Returns:
+       merge_dict (dict): the code candidates and their frequency.
+    """
     with open(path, 'r') as sr:
          lines = sr.readlines()
          merge_dict = OrderedDict()
+         # for bpe codes, the first line shows code version
          for line in tqdm(lines[1:]):
              merge = line.strip()
              items = merge.split(" ")
              token = "".join(items)
              for split_token in tokens:
-                 merge_dict[merge] = 10
+                 merge_dict[merge] = min_number
                  if token in split_token:
                      merge_dict[merge] += tokens[split_token]
-             '''if not token.endswith('</w>'):
-                token = token+"@@"
-             if token in tokens:
-                merged_token.add(token)
-                merge_dict[merge] = tokens[token]
-             else:
-                 #continue
-                 #print(merge)
-                 merge_dict[merge] = 10'''
 
-    #print(len(merge_dict), len(tokens))
     return merge_dict
 
 
-def write(path,merge_code):
-    with open(path, 'w') as sw:
-        for code in merge_code:
-            sw.write(code +" "+ str(merge_code[code]) + "\n")
+def get_tokens(source_file, target_file, token_candidate_file):
+    """
+    Get all token cadidates associated with their frequencies. Here we take BPE-generated code segmentation as token candidates. 
+    Arguments: 
+        source_file (str): the source file from machine translation
+        target_file (str): the target file from machine translation
+        token_candidate_file: the token candididate file. Here we take BPE-generated code segmentation as candidates.
+    """
 
-
-def get_tokens(source_file, target_file, token_candidate_file, token_file):
     tokens = read_tokens(source_file)
     tokens = read_tokens(target_file, tokens=tokens)
-    merge_code = read_merge_code(token_candidate_file, tokens)
-    #write(token_file, merge_code)
+    merge_code = read_merge_code_frequency(token_candidate_file, tokens)
     return merge_code

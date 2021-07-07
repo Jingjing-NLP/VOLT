@@ -5,6 +5,7 @@
 cd ../POT
 python3 -m pip install --force-reinstall --editable ./ -i https://pypi.doubanio.com/simple --user
 
+
 cd ../examples
 
 
@@ -122,7 +123,9 @@ for cp in "${CORPORA[@]}"; do
     #shuf -r -n 100000 $tmp/bpe.$lang.train.$cp >> $TRAIN
     cat $tmp/bpe.$lang.train.$cp > $TRAIN$lang
     cat $tmp/bpe.$lang.train.en >> $TRAIN$lang
-    python3 ../ot_run.py $BPE_INITIAL/processed_data/$lang.train.$cp $BPE_INITIAL/processed_data/$lang.train.en $BPE_INITIAL/code$cp $prep/en$cp.vocab 10000 1000 500
+    python3 ../ot_run.py --source_file $BPE_INITIAL/processed_data/$lang.train.$cp --target_file $BPE_INITIAL/processed_data/$lang.train.en \
+	    --token_candidate_file $BPE_INITIAL/code$cp \
+	    --vocab_file $prep/en$cp.vocab --max_number 10000 --interval 1000  --loop_in_ot 500 
 
     echo "#version: 0.2" > $prep/en$cp.bpe
     cat $prep/en$cp.vocab >> $prep/en$cp.bpe

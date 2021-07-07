@@ -126,7 +126,7 @@ for cp in "${CORPORA[@]}"; do
     shuf -r -n 100000 $tmp/bpe.$lang.train.$cp >> $TRAIN
 done
 
-python3 ../ot_run.py $TRAIN_EN $TRAIN $BPE_INITIAL/code $prep/multilingual.vocab 100000 10000 400
+python3 ../ot_run.py --source_file $TRAIN_EN --target_file $TRAIN --token_candidate_file $BPE_INITIAL/code --vocab_file $prep/multilingual.vocab --max_number 100000 --interval 10000 --loop_in_ot 400
 
 #shuf -r -n 100000 $TRAIN_EN >> $TRAIN
 
