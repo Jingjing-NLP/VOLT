@@ -122,7 +122,7 @@ For TED, you can download at [TED](https://drive.google.com/drive/folders/1FNH7c
 Please cite as:
 
 ``` bibtex
-@inproceedings{ott2019fairseq,
+@inproceedings{volt,
   title = {Vocabulary Learning via Optimal Transport for Neural Machine Translation},
   author= {Jingjing Xu and
                Hao Zhou and
