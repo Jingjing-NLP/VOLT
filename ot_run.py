@@ -106,6 +106,7 @@ def write_vocab(tokens, pmatrix, chars, write_file_name, threshold=0.0001):
   with open(write_file_name, 'w') as f:
         for item in vocab_tokens:
             f.write(item +"\n")
+  print("The vocabulary has been written into the given file. You can use this vocabulary to segment tokens in subword-nmt")
 
 
 def run_ot(oldtokens, chars, max_number=30000, interval=1000, numItermax=300):
@@ -141,6 +142,7 @@ def run_ot(oldtokens, chars, max_number=30000, interval=1000, numItermax=300):
         previous_entropy = Gs
     sorted_scores = sorted(scores.items(), key=lambda x:x[1], reverse=True)
     print("best size: ", str(sorted_scores[0][0]))
+    print("One optional solution is that you can use this size to generated vocabulary in subword-nmt or sentencepiece")
     return sorted_scores[0][0]
      
 
@@ -185,7 +187,10 @@ if __name__ == "__main__":
                        help = 'the total loop of optimal transation.')
     parser.add_argument('--threshold', default=0.00001, type=float,
                        help = 'the threshhold for generating the vocabulary based on the optimal matrix')
-
+    parser.add_argument('--tokenizer', default='subword-nmt',choices=['sentencepiece', 'subword-nmt'])
+    parser.add_argument('--size_file', default="size.txt", 
+                       help='the size file stores the best size')
+    
     args = parser.parse_args()
     source_file = args.source_file
     target_file = args.target_file
@@ -195,11 +200,15 @@ if __name__ == "__main__":
     interval = args.interval
     num_iter_max = args.loop_in_ot
     threshold = args.threshold
+    tokenizer = args.tokenizer
+    size_file = args.size_file
 
     
-    oldtokens = get_tokens.get_tokens(source_file, target_file, token_candidate_file) # get token candidates and their frequencies
-    chars = get_chars.get_chars(source_file, target_file) # get chars and their frequencies
+    oldtokens = get_tokens.get_tokens(source_file, target_file, token_candidate_file, tokenizer=args.tokenizer) # get token candidates and their frequencies
+    chars = get_chars.get_chars(source_file, target_file, tokenizer=args.tokenizer) # get chars and their frequencies
     optimal_size = run_ot(oldtokens, chars, max_number,interval, num_iter_max) # generate the best ot size
     Gs = run_ot_write(oldtokens, chars, optimal_size, num_iter_max) # generate the optimal matrix based on the ot size
     write_vocab(oldtokens, Gs, chars, vocab_file, threshold) #generate the vocabulary based on the optimal matrix
-
+    with open(size_file, 'w') as sw:
+         sw.write(str(optimal_size)+"\n")
+    #return optimal_size

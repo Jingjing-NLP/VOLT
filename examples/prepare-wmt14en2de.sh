@@ -133,13 +133,13 @@ done
 #fi
 
 echo "learn_bpe.py on ${TRAIN}..."
-python $BPEROOT/learn_bpe.py -s $BPE_TOKENS  < $TRAIN > $BPE_CODE
+python3 $BPEROOT/learn_bpe.py -s $BPE_TOKENS  < $TRAIN > $BPE_CODE
 
 
 for L in $src $tgt; do
     for f in train.$L valid.$L test.$L; do
         echo "apply_bpe.py to ${f}..."
-        python $BPEROOT/apply_bpe.py -c $BPE_CODE < $tmp/$f > $tmp/bpe.$f
+        python3 $BPEROOT/apply_bpe.py -c $BPE_CODE < $tmp/$f > $tmp/bpe.$f
     done
 done
 

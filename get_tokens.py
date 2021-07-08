@@ -4,7 +4,7 @@ from tqdm import tqdm
 from collections import OrderedDict
 
 
-def read_tokens(path, tokens={}, max_number_line=1e7, special_tokens="@@"):
+def read_tokens(path, tokens={}, max_number_line=1e7, tokenizer='subword-nmt'): #@@
     """
     Get all tokens and their frequencies. 
     Arguments:
@@ -23,20 +23,29 @@ def read_tokens(path, tokens={}, max_number_line=1e7, special_tokens="@@"):
              line = lines[i]
              items = line.split()
              for item in items:
-                 if not item.endswith(special_tokens):
-                        if item+"</w>" not in tokens:
-                             tokens[item+"</w>"] = 1
-                        else:
-                             tokens[item+"</w>"] += 1
+                 if tokenizer == 'subword-nmt':
+                     special_tokens = "@@"
+                     if not item.endswith(special_tokens):
+                            if item+"</w>" not in tokens:
+                                 tokens[item+"</w>"] = 1
+                            else:
+                                 tokens[item+"</w>"] += 1
+                     else:
+                          if item not in tokens:
+                               tokens[item] = 1
+                          else:
+                               tokens[item] += 1
+                 elif tokenizer == 'sentencepiece':
+                    if item not in tokens:
+                        tokens[item] =1 
+                    else:
+                        tokens[item] += 1
                  else:
-                      if item not in tokens:
-                           tokens[item] = 1
-                      else:
-                           tokens[item] += 1
+                    print("Errors: we only support subword-nmt and sentencepiece!")
     return tokens
 
 
-def read_merge_code_frequency(path, tokens, min_number=10):
+def read_merge_code_frequency(path, tokens, min_number=10, tokenizer='subword-nmt'):
     """
     Get all code segmentations and their frequencies. Here we take BPE-generated code segmentations as token candidates. We usually sample a large BPE size, e.g., 3,0000. 
     Arguments:
@@ -50,7 +59,9 @@ def read_merge_code_frequency(path, tokens, min_number=10):
          lines = sr.readlines()
          merge_dict = OrderedDict()
          # for bpe codes, the first line shows code version
-         for line in tqdm(lines[1:]):
+         if tokenizer == 'subword-nmt':
+             lines = lines[1:] # the first line is version number
+         for line in tqdm(lines):
              merge = line.strip()
              items = merge.split(" ")
              token = "".join(items)
@@ -62,7 +73,7 @@ def read_merge_code_frequency(path, tokens, min_number=10):
     return merge_dict
 
 
-def get_tokens(source_file, target_file, token_candidate_file):
+def get_tokens(source_file, target_file, token_candidate_file, tokenizer='subword-nmt'):
     """
     Get all token cadidates associated with their frequencies. Here we take BPE-generated code segmentation as token candidates. 
     Arguments: 
@@ -71,7 +82,7 @@ def get_tokens(source_file, target_file, token_candidate_file):
         token_candidate_file: the token candididate file. Here we take BPE-generated code segmentation as candidates.
     """
 
-    tokens = read_tokens(source_file)
-    tokens = read_tokens(target_file, tokens=tokens)
-    merge_code = read_merge_code_frequency(token_candidate_file, tokens)
+    tokens = read_tokens(source_file, tokenizer=tokenizer)
+    tokens = read_tokens(target_file, tokens=tokens, tokenizer=tokenizer)
+    merge_code = read_merge_code_frequency(token_candidate_file, tokens, tokenizer=tokenizer)
     return merge_code

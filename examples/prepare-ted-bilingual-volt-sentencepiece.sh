@@ -124,12 +124,12 @@ for cp in "${CORPORA[@]}"; do
     cat $tmp/bpe.$lang.train.$cp > $TRAIN$lang
     cat $tmp/bpe.$lang.train.en >> $TRAIN$lang
     python3 ../ot_run.py --source_file $BPE_INITIAL/processed_data/$lang.train.$cp --target_file $BPE_INITIAL/processed_data/$lang.train.en \
-	    --token_candidate_file $BPE_INITIAL/code$cp \
-	    --vocab_file $prep/en$cp.vocab --max_number 10000 --interval 1000  --loop_in_ot 500 --tokenizer subword-nmt --size_file $prep/$lang.vocab 
+	    --token_candidate_file $BPE_INITIAL/$lang.vocab \
+	    --vocab_file $prep/en$cp.vocab --max_number 10000 --interval 1000  --loop_in_ot 500 --tokenizer subword-nmt --size_file $prep/en$cp.size
 
-    echo "#version: 0.2" > $prep/en$cp.bpe
-    cat $prep/en$cp.vocab >> $prep/en$cp.bpe
-
+    best_size=$(cat $prep/en$cp.size)
+    python3  spm/spm_train.py --input=$TRAIN$lang --model_prefix=$prep/$lang --vocab_size=$best_size --character_coverage=1.0 --model_type=bpe
+    #size=$(cat $prep/size.$cp)
     mkdir -p $prep/processed_data
     
     for l in $cp $tgt; do
@@ -137,10 +137,10 @@ for cp in "${CORPORA[@]}"; do
                 if [ $f == train ]
                 then
                     echo $cp
-                    python3 $BPEROOT/apply_bpe.py -c $prep/en$cp.bpe < $tmp/bpe.$lang.$f.$l > $prep/processed_data/$lang.$f.$l
+		    python3 spm/spm_encoder.py --model $prep/$lang.model --inputs $tmp/bpe.$lang.$f.$l --outputs $prep/processed_data/$lang.$f.$l --output_format piece
                else
-                    python3 $BPEROOT/apply_bpe.py -c $prep/en$cp.bpe < $tmp/bpe.$lang.$f.$l > $prep/processed_data/$lang.$f.$l
-               fi  
+                    python3 spm/spm_encoder.py --model $prep/$lang.model --inputs $tmp/bpe.$lang.$f.$l --outputs $prep/processed_data/$lang.$f.$l --output_format piece
+	       fi  
             done
         
     done

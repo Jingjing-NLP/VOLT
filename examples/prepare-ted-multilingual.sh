@@ -129,7 +129,7 @@ shuf -r -n 100000 $TRAIN_EN >> $TRAIN
 
 
 echo "learn_bpe.py on ${TRAIN}..."
-python $BPEROOT/learn_bpe.py -s $BPE_TOKENS  < $TRAIN > $BPE_CODE
+python3 $BPEROOT/learn_bpe.py -s $BPE_TOKENS  < $TRAIN > $BPE_CODE
 
 
 mkdir -p $prep/processed_data
@@ -143,9 +143,9 @@ for cp in "${CORPORA[@]}"; do
                #FN=$(wc -l < $tmp/bpe.$lang.$f.$l)
                #float=`expr $FN / 10`
                #head -${float%.*} $tmp/bpe.$lang.$f.$l >  $tmp/bpe.$lang.$f.$l.small
-               python $BPEROOT/apply_bpe.py -c $BPE_CODE < $tmp/bpe.$lang.$f.$l > $prep/processed_data/$lang.$f.$l
+               python3 $BPEROOT/apply_bpe.py -c $BPE_CODE < $tmp/bpe.$lang.$f.$l > $prep/processed_data/$lang.$f.$l
             else
-               python $BPEROOT/apply_bpe.py -c $BPE_CODE < $tmp/bpe.$lang.$f.$l > $prep/processed_data/$lang.$f.$l
+               python3 $BPEROOT/apply_bpe.py -c $BPE_CODE < $tmp/bpe.$lang.$f.$l > $prep/processed_data/$lang.$f.$l
             fi
         done
     done
