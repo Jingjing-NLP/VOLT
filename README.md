@@ -67,8 +67,8 @@ pip3 install tqdm
   mkdir spmout
   python3 spm/spm_train.py --input=training_data --model_prefix=spm --vocab_size=$size --character_coverage=1.0 --model_type=bpe
   #After this step, you will see spm.vocab and spm.model
-  python3 spm/spm_encoder.py --model spm.model --inputs source_data --outputs spmout/source_data --output_format piece
-  python3 spm/spm_encoder.py --model spm.model --inputs target_data --outputs spmout/target_data --output_format piece
+  python3 spm/spm_encoder.py --model spm.model --inputs bpeoutput/source.file --outputs spmout/source_data --output_format piece
+  python3 spm/spm_encoder.py --model spm.model --inputs bpeoutput/target.file --outputs spmout/target_data --output_format piece
   ```
 
 * The second step is to run VOLT scripts. It accepts the following parameters:
