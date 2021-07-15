@@ -61,7 +61,7 @@ pip3 install tqdm
   BPE_CODE=code # the path to save vocabulary
   python3 $BPEROOT/learn_bpe.py -s $size  < training_data > $BPE_CODE
   python3 $BPEROOT/apply_bpe.py -c $BPE_CODE < source_file > bpeoutput/source.file
-  python3 $BPEROOT/apply_bpe.py -c $BPE_CODE < target_file > bpeoutput/source.file
+  python3 $BPEROOT/apply_bpe.py -c $BPE_CODE < target_file > bpeoutput/target.file
 
   #sentencepiece style:
   mkdir spmout
@@ -95,7 +95,7 @@ pip3 install tqdm
   
   ```
     #for subword-nmt toolkit
-    python3 $BPEROOT/apply_bpe.py -c bpeoutput/vocab < source_file > bpeoutput/source.file
+    python3 $BPEROOT/apply_bpe.py -c bpeoutput/vocab < source_file > bpeoutput/source.fileWrite output of target to bpeoutput/target.file
     python3 $BPEROOT/apply_bpe.py -c bpeoutput/vocab < target_file > bpeoutput/source.file
 
     #for sentencepiece toolkit, here we only keep the optimal size
