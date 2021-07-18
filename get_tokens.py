@@ -83,6 +83,7 @@ def get_tokens(source_file, target_file, token_candidate_file, tokenizer='subwor
     """
 
     tokens = read_tokens(source_file, tokenizer=tokenizer)
-    tokens = read_tokens(target_file, tokens=tokens, tokenizer=tokenizer)
+    if target_file != None:
+        tokens = read_tokens(target_file, tokens=tokens, tokenizer=tokenizer)
     merge_code = read_merge_code_frequency(token_candidate_file, tokens, tokenizer=tokenizer)
     return merge_code

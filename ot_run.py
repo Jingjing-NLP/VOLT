@@ -97,7 +97,7 @@ def write_vocab(tokens, pmatrix, chars, write_file_name, threshold=0.0001):
       minm = 0
       itemlist = []
       if len(new_tokens[token]) == 0:
-          #print(token, new_tokens[token])
+          print(token, new_tokens[token])
           continue
       if  token.strip() != "" :
          vocab_tokens.append(token)

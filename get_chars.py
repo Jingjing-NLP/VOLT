@@ -44,7 +44,8 @@ def get_chars(source_file, target_file, tokenizer='subword-nmt'):
       return_dicts (dict): sorted characters. 
   """
   dicts = read(source_file, tokenizer=tokenizer)
-  dicts = read(target_file, dicts=dicts, tokenizer=tokenizer)
+  if target_file != None:
+      dicts = read(target_file, dicts=dicts, tokenizer=tokenizer)
  
   # filter charaters with frequency less than 2
   dicts = {key:val for key, val in dicts.items() if val > 2}
