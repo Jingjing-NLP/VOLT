@@ -66,30 +66,30 @@ mkdir -p $orig $tmp $prep
 
 
 
-cd $orig
+#'''cd $orig
+#
+#for ((i=0;i<${#URLS[@]};++i)); do
+#    file=${FILES[i]}
+#    if [ -f $file ]; then
+#        echo "$file already exists, skipping download"
+#    else
+#        url=${URLS[i]}
+#        wget "$url"
+#        if [ -f $file ]; then
+#            echo "$url successfully downloaded."
+#        else
+#            echo "$url not successfully downloaded."
+#            exit -1
+#        fi
+#        if [ ${file: -4} == ".tgz" ]; then
+#            tar zxvf $file
+#        elif [ ${file: -4} == ".tar" ]; then
+#            tar xvf $file
+#        fi
+#    fi
+#done
 
-for ((i=0;i<${#URLS[@]};++i)); do
-    file=${FILES[i]}
-    if [ -f $file ]; then
-        echo "$file already exists, skipping download"
-    else
-        url=${URLS[i]}
-        wget "$url"
-        if [ -f $file ]; then
-            echo "$url successfully downloaded."
-        else
-            echo "$url not successfully downloaded."
-            exit -1
-        fi
-        if [ ${file: -4} == ".tgz" ]; then
-            tar zxvf $file
-        elif [ ${file: -4} == ".tar" ]; then
-            tar xvf $file
-        fi
-    fi
-done
-
-cd ..
+#cd ..
 
 echo "pre-processing train data..."
 for l in $src $tgt; do

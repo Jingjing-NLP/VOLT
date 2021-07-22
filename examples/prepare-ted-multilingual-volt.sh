@@ -82,7 +82,7 @@ prep=$OUTDIR
 tmp=$prep/tmp
 
 mkdir -p $prep $tmp
-tmp1=ted
+tmp1=$3
 
 echo "pre-processing train data..."
 for cp in "${CORPORA[@]}"; do
@@ -90,7 +90,7 @@ for cp in "${CORPORA[@]}"; do
     for l in $cp $tgt; do
         for f in train test; do 
             rm $tmp/bpe.$lang.$f.$l
-            cat $tmp1/data/${cp}_en/$f.$l  >> $tmp/bpe.$lang.$f.$l
+            cat $tmp1/${cp}_en/$f.$l  >> $tmp/bpe.$lang.$f.$l
         done 
     done
 done
@@ -101,7 +101,7 @@ for cp in "${CORPORA[@]}"; do
     for l in $cp $tgt; do
         for f in dev; do        
             rm $tmp/bpe.$lang.valid.$l
-            cat $tmp1/data/${cp}_en/$f.$l  >> $tmp/bpe.$lang.valid.$l
+            cat $tmp1/${cp}_en/$f.$l  >> $tmp/bpe.$lang.valid.$l
         done
     done
 done
@@ -123,9 +123,10 @@ done
 
 for cp in "${CORPORA[@]}"; do
     lang=$cp-en
-    shuf -r -n 100000 $tmp/bpe.$lang.train.$cp >> $TRAIN
+    shuf -r -n 10000 $tmp/bpe.$lang.train.$cp >> $TRAIN
 done
 
+#shuf -r -n 10000 $TRAIN_EN >> $TRAIN
 python3 ../ot_run.py --source_file $TRAIN_EN --target_file $TRAIN --token_candidate_file $BPE_INITIAL/code --vocab_file $prep/multilingual.vocab --max_number 100000 --interval 10000 --loop_in_ot 400 --tokenizer subword-nmt --size_file $prep/size.txt 
 
 #shuf -r -n 100000 $TRAIN_EN >> $TRAIN
@@ -148,10 +149,10 @@ for cp in "${CORPORA[@]}"; do
                #FN=$(wc -l < $tmp/bpe.$lang.$f.$l)
                #float=`expr $FN / 10`
                #head -${float%.*} $tmp/bpe.$lang.$f.$l >  $tmp/bpe.$lang.$f.$l.small
-               python3 $BPEROOT/apply_bpe.py -c multilingual.vocab < $tmp/bpe.$lang.$f.$l > $prep/processed_data/$lang.$f.$l
+               python3 $BPEROOT/apply_bpe.py -c $prep/multilingual.bpe < $tmp/bpe.$lang.$f.$l > $prep/processed_data/$lang.$f.$l
             else
                #echo $cp
-               python3 $BPEROOT/apply_bpe.py -c multilingual.vocab < $tmp/bpe.$lang.$f.$l > $prep/processed_data/$lang.$f.$l
+               python3 $BPEROOT/apply_bpe.py -c $prep/multilingual.bpe < $tmp/bpe.$lang.$f.$l > $prep/processed_data/$lang.$f.$l
             fi
         done
     done

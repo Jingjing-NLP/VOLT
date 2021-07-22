@@ -86,7 +86,7 @@ prep=$OUTDIR
 tmp=$prep/tmp
 
 mkdir -p $prep $tmp
-tmp1=ted
+tmp1=$3
 
 echo "pre-processing train data..."
 for cp in "${CORPORA[@]}"; do
@@ -94,7 +94,7 @@ for cp in "${CORPORA[@]}"; do
     for l in $cp $tgt; do
         for f in train test; do
             rm $tmp/bpe.$lang.$f.$l
-            cat $tmp1/data/${cp}_en/$f.$l >> $tmp/bpe.$lang.$f.$l
+            cat $tmp1/${cp}_en/$f.$l >> $tmp/bpe.$lang.$f.$l
         done
     done
 done
@@ -105,7 +105,7 @@ for cp in "${CORPORA[@]}"; do
     for l in $cp $tgt; do
         for f in dev; do
             rm $tmp/bpe.$lang.valid.$l
-            cat $tmp1/data/${cp}_en/$f.$l  >> $tmp/bpe.$lang.valid.$l
+            cat $tmp1/${cp}_en/$f.$l  >> $tmp/bpe.$lang.valid.$l
         done
     done
 done
