@@ -128,8 +128,10 @@ cd ../
   
   ```
     #subword-nmt style
-    python3 $BPEROOT/apply_bpe.py -c bpeoutput/vocab < source_file > bpeoutput/source.file
-    python3 $BPEROOT/apply_bpe.py -c bpeoutput/vocab < target_file > bpeoutput/source.file #optional if your task does not contain target texts
+    echo "#version: 0.2" > bpeoutput/vocab.seg # add version info
+    echo bpeoutput/vocab >> bpeoutput/vocab.seg
+    python3 $BPEROOT/apply_bpe.py -c bpeoutput/vocab.seg < source_file > bpeoutput/source.file
+    python3 $BPEROOT/apply_bpe.py -c bpeoutput/vocab.seg < target_file > bpeoutput/source.file #optional if your task does not contain target texts
 
     #sentencepiece style
     #for sentencepiece toolkit, here we only keep the optimal size
@@ -155,8 +157,8 @@ We have given several examples in path "examples/", including En-De translation,
 
 The WMT-14 En-de translation data can be downloaed via the running scripts.
 
-For TED, you can download at [TED](https://drive.google.com/drive/folders/1FNH7cXFYWWnUdH2LyUFFRYmaWYJJveKy?usp=sharing).
-
+For TED X-EN data, you can download at [x-EN](https://drive.google.com/drive/folders/1FNH7cXFYWWnUdH2LyUFFRYmaWYJJveKy?usp=sharing).
+For TED EN-X data, you can download at [EN-X](https://drive.google.com/drive/u/1/folders/1du13KQG6JM9u1JLhnS47Pu4BQtfP2AK3)
 
 # Citation
 

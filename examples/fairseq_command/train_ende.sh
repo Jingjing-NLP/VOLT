@@ -29,7 +29,7 @@ python3 fairseq_cli/train.py --num-workers 8 en_de \
     --lr $lr --lr-scheduler inverse_sqrt --warmup-updates 4000 --warmup-init-lr 1e-07 \
     --dropout 0.3 --weight-decay 0.0 --update-freq $update_freq \
     --criterion label_smoothed_cross_entropy --label-smoothing 0.1 \
-    --max-tokens $max_token --ddp-backend=no_c10d \
+    --max-tokens $max_token  \
     --fp16  --max-epoch $max_epoch --keep-last-epochs 5
 
 python3 scripts/average_checkpoints.py \
