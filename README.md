@@ -142,7 +142,8 @@ cd ../
     python3 spm/spm_encoder.py --model spm.model --inputs target_file --outputs spmout/target.file --output_format piece #optional if your task does not contain target texts
   ```
 
-* The last step is to use the segmented texts for downstream tasks. You can use the repo [Fairseq](https://github.com/pytorch/fairseq) for training and evaluation. We also upload the training and evaluation code in path "examples/". 
+* The last step is to use the segmented texts for downstream tasks. You can use the repo [Fairseq](https://github.com/pytorch/fairseq) for training and evaluation. We also upload the training and evaluation code in path "examples/". Notice: For a comparison of BLEU, you need to do "remove-bpe" operations for the generated texts. 
+
 # Examples
 
 We have given several examples in path "examples/", including En-De translation, En-Fr translation, multilingual translation, and En-De translation without joint vocabularies. 
@@ -157,7 +158,7 @@ We have given several examples in path "examples/", including En-De translation,
 
 The WMT-14 En-de translation data can be downloaed via the running scripts.
 
-For TED X-EN data, you can download at [x-EN](https://drive.google.com/drive/folders/1FNH7cXFYWWnUdH2LyUFFRYmaWYJJveKy?usp=sharing).
+For TED X-EN data, you can download at [X-EN](https://drive.google.com/drive/folders/1FNH7cXFYWWnUdH2LyUFFRYmaWYJJveKy?usp=sharing).
 For TED EN-X data, you can download at [EN-X](https://drive.google.com/drive/u/1/folders/1du13KQG6JM9u1JLhnS47Pu4BQtfP2AK3)
 
 # Citation
