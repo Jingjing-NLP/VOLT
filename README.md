@@ -2,7 +2,7 @@
 
 
 VOLT(-py) is a vocabulary learning codebase that allows researchers and developers to automaticaly generate a vocabulary with suitable granularity for machine translation.  
-
+To help more readers understand our work better, I write a [blog](volt-blog/blog.html) at this repo. 
 
 
 ### What's New:
