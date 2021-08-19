@@ -61,7 +61,7 @@ cd ../
   BPE_CODE=bpeoutput/code # the path to save vocabulary
   python3 subword-nmt/learn_bpe.py -s $size  < training_data > $BPE_CODE
   python3 subword-nmt/apply_bpe.py -c $BPE_CODE < source_file > bpeoutput/source.file
-  python3 subword-nmt/apply_bpe.py -c $BPE_CODE < target_file > bpeoutput/source.file 
+  python3 subword-nmt/apply_bpe.py -c $BPE_CODE < target_file > bpeoutput/target.file 
 
   #sentencepiece style:
   mkdir spmout
