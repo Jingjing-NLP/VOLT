@@ -65,8 +65,9 @@ def read_merge_code_frequency(path, tokens, min_number=10, tokenizer='subword-nm
              merge = line.strip()
              items = merge.split(" ")
              token = "".join(items)
+             merge_dict[merge] = min_number
              for split_token in tokens:
-                 merge_dict[merge] = min_number
+                 #merge_dict[merge] = min_number
                  if token in split_token:
                      merge_dict[merge] += tokens[split_token]
 
