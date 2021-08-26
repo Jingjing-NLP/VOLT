@@ -132,14 +132,14 @@ def run_ot(oldtokens, chars, max_number=30000, interval=1000, numItermax=300):
         print("finish building")
         epsilon = 0.1  # entropy parameter
         alpha = 1.  # Unbalanced KL relaxation parameter
-        Gs,_ = ot.sinkhorn(a,b,d_matrix,1.0,method='sinkhorn',numItermax=numItermax, epsilon0=1e-6)
+        current_entropy,_ = ot.sinkhorn(a,b,d_matrix,1.0,method='sinkhorn',numItermax=numItermax, epsilon0=1e-6)
         if iter_number <= interval:
-            previous_entropy = Gs
+            previous_entropy = current_entropy
             continue#print("finish reading", iter_number, Gs, (Gs-previous_entropy)/2)
         if iter_number > interval:
-           print("finish running", iter_number, Gs, Gs-previous_entropy)
-           scores[iter_number] = Gs-previous_entropy
-        previous_entropy = Gs
+           print("finish running", iter_number, current_entropy, Gs-previous_entropy)
+           scores[iter_number] = current_entropy-previous_entropy
+        previous_entropy = current_entropy
     sorted_scores = sorted(scores.items(), key=lambda x:x[1], reverse=True)
     print("best size: ", str(sorted_scores[0][0]))
     print("One optional solution is that you can use this size to generated vocabulary in subword-nmt or sentencepiece")

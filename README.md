@@ -64,6 +64,7 @@ cd ../
   python3 subword-nmt/apply_bpe.py -c $BPE_CODE < target_file > bpeoutput/target.file 
 
   #sentencepiece style:
+  cd examples
   mkdir spmout
   python3 spm/spm_train.py --input=training_data --model_prefix=spm --vocab_size=$size --character_coverage=1.0 --model_type=bpe
   #After this step, you will see spm.vocab and spm.model
@@ -83,6 +84,7 @@ cd ../
   
 
   #sentencepiece style:
+  cd examples
   mkdir spmout
   python3 spm/spm_train.py --input=source_file --model_prefix=spm --vocab_size=$size --character_coverage=1.0 --model_type=bpe
   #After this step, you will see spm.vocab and spm.model
