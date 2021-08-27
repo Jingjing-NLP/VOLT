@@ -137,7 +137,7 @@ def run_ot(oldtokens, chars, max_number=30000, interval=1000, numItermax=300):
             previous_entropy = current_entropy
             continue#print("finish reading", iter_number, Gs, (Gs-previous_entropy)/2)
         if iter_number > interval:
-           print("finish running", iter_number, current_entropy, Gs-previous_entropy)
+           #print("finish running", iter_number, current_entropy, current_entropy-previous_entropy)
            scores[iter_number] = current_entropy-previous_entropy
         previous_entropy = current_entropy
     sorted_scores = sorted(scores.items(), key=lambda x:x[1], reverse=True)
