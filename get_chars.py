@@ -43,6 +43,7 @@ def get_chars(source_file, target_file, tokenizer='subword-nmt'):
   Returns:
       return_dicts (dict): sorted characters. 
   """
+  print("reading char file")
   dicts = read(source_file, tokenizer=tokenizer)
   if target_file != None:
       dicts = read(target_file, dicts=dicts, tokenizer=tokenizer)

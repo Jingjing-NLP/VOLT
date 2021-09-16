@@ -45,7 +45,7 @@ def read_tokens(path, tokens={}, max_number_line=1e7, tokenizer='subword-nmt'): 
     return tokens
 
 
-def read_merge_code_frequency(path, tokens, min_number=10, tokenizer='subword-nmt'):
+def read_merge_code_frequency(path, tokens, min_number=1, tokenizer='subword-nmt'):
     """
     Get all code segmentations and their frequencies. Here we take BPE-generated code segmentations as token candidates. We usually sample a large BPE size, e.g., 3,0000. 
     Arguments:
@@ -55,6 +55,7 @@ def read_merge_code_frequency(path, tokens, min_number=10, tokenizer='subword-nm
     Returns:
        merge_dict (dict): the code candidates and their frequency.
     """
+    print("reading candidate tokens")
     with open(path, 'r') as sr:
          lines = sr.readlines()
          merge_dict = OrderedDict()

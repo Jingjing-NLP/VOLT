@@ -93,14 +93,30 @@ def write_vocab(tokens, pmatrix, chars, write_file_name, threshold=0.0001):
 
 
   vocab_tokens = []
+  deleted_actions = {}
+  required_actions = {}
   for token in new_tokens:
       minm = 0
       itemlist = []
       if len(new_tokens[token]) == 0:
           #print(token, new_tokens[token])
+          #deleted_actions[token.replace(" ", "")] = token
           continue
       if  token.strip() != "" :
+         #vocab_tokens.append(token)
+         left, right = token.split(" ")
+         required_actions[left] = token
+         required_actions[right] = token
+   
+  for token in new_tokens:
+      minm = 0
+      itemlist = []
+      if len(new_tokens[token]) == 0 and token.replace(" ", "") not in required_actions:
+          print(token, new_tokens[token])
+          continue
+      if token.strip() != "" :
          vocab_tokens.append(token)
+         
 
 
   with open(write_file_name, 'w') as f:
@@ -128,8 +144,8 @@ def run_ot(oldtokens, chars, max_number=30000, interval=1000, numItermax=300):
         a = get_r(chars, total_chars)
         #print(min(a), min(b))
         b = get_r(tokens, total_tokens, False)
-        print(min(a), min(b))
-        print("finish building")
+        #print(min(a), min(b))
+        #print("finish building")
         epsilon = 0.1  # entropy parameter
         alpha = 1.  # Unbalanced KL relaxation parameter
         current_entropy,_ = ot.sinkhorn(a,b,d_matrix,1.0,method='sinkhorn',numItermax=numItermax, epsilon0=1e-6)
@@ -157,7 +173,7 @@ def run_ot_write(oldtokens, chars, optimal_size, numItermax=300):
     d_matrix = build_d_matrix(list(chars.items()), tokens)
     a = get_r(chars.items(), total_chars)
     b = get_r(tokens, total_tokens, False)
-    print("finish building")
+    #print("finish building")
     epsilon = 0.1  # entropy parameter
     alpha = 1.  # Unbalanced KL relaxation parameter
     _,Gs = ot.sinkhorn(a,b,d_matrix,1.0,method='sinkhorn',numItermax=numItermax, epsilon0=1e-6)
@@ -202,7 +218,6 @@ if __name__ == "__main__":
     threshold = args.threshold
     tokenizer = args.tokenizer
     size_file = args.size_file
-
     
     oldtokens = get_tokens.get_tokens(source_file, target_file, token_candidate_file, tokenizer=args.tokenizer) # get token candidates and their frequencies
     chars = get_chars.get_chars(source_file, target_file, tokenizer=args.tokenizer) # get chars and their frequencies
