@@ -67,7 +67,9 @@ cd ../
   cd examples
   mkdir spmout
   python3 spm/spm_train.py --input=training_data --model_prefix=spm --vocab_size=$size --character_coverage=1.0 --model_type=bpe
-  #After this step, you will see spm.vocab and spm.model
+  #After this step, you will see spm.vocab and spm.model. 
+  #Change spm.vocab to a file where each line is splited via a single space like example "abc 100"
+  sed -i 's/\t/ /g' spm.vocab
   python3 spm/spm_encoder.py --model spm.model --inputs source_file --outputs spmout/source.file --output_format piece
   python3 spm/spm_encoder.py --model spm.model --inputs target_file --outputs spmout/target.file --output_format piece
   ```
@@ -94,7 +96,7 @@ cd ../
 
 * The second step is to run VOLT scripts. It accepts the following parameters:
   * --source_file: the file storing source data for seq2seq tasks or the file string all raw texts for non-seq2seq tasks.
-  * --token_candidate_file: the file storing token candidates.
+  * --token_candidate_file: the file storing token candidates. Each line is splited via a single space like example "abc 100"
   * --tokenizer: which toolkit you use to get token candidates.  Only two choices are supported: subword-nmt and sentencepiece. 
   * --size_file: the file to store the vocabulary size recommended by VOLT.
   * --target_file: (optional) the file storing target data for seq2seq tasks. None by default.
