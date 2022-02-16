@@ -113,7 +113,7 @@ cd ../
   #sentencepiece style
   python3 ../ot_run.py --source_file spmoutput/source.file --target_file spmoutput/target.file \
             --token_candidate_file spm.vocab \
-            --vocab_file spmoutput/vocab --max_number 10000 --interval 1000  --loop_in_ot 500 --tokenizer sentencepiece --size_file spmoutput/size 
+            --max_number 10000 --interval 1000  --loop_in_ot 500 --tokenizer sentencepiece --size_file spmoutput/size 
 
   #For non-seq2seq tasks with one source file, you can use the following commands:
   #subword-nmt style
@@ -122,10 +122,9 @@ cd ../
             --vocab_file bpeoutput/vocab --max_number 10000 --interval 1000  --loop_in_ot 500 --tokenizer subword-nmt --size_file bpeoutput/size 
     
   #sentencepiece style
-  BPE_CODE=spm.vocab
   python3 ../ot_run.py --source_file spmoutput/source.file \
             --token_candidate_file spm.vocab  \
-            --vocab_file spmoutput/vocab --max_number 10000 --interval 1000  --loop_in_ot 500 --tokenizer sentencepiece --size_file spmoutput/size 
+            --max_number 10000 --interval 1000  --loop_in_ot 500 --tokenizer sentencepiece --size_file spmoutput/size 
 
   ```
 * The third step is to use the generated vocabulary to segment your texts:

@@ -194,7 +194,7 @@ if __name__ == "__main__":
     parser.add_argument('--token_candidate_file', default=None,
                         help='path to token candidates. In this implementation, we take BPE-generated code segmentation as token candidates.')
     parser.add_argument('--vocab_file', default=None,
-                       help='path to the file storing the generated tokens.')
+                       help='path to the file storing the generated tokens. unnecessary for sentencepiece.')
     parser.add_argument('--max_number', default=10000, type=int,
                        help='the maximum size of the generated vocabulary')
     parser.add_argument('--interval', default=1000, type=int,
@@ -222,8 +222,11 @@ if __name__ == "__main__":
     oldtokens = get_tokens.get_tokens(source_file, target_file, token_candidate_file, tokenizer=args.tokenizer) # get token candidates and their frequencies
     chars = get_chars.get_chars(source_file, target_file, tokenizer=args.tokenizer) # get chars and their frequencies
     optimal_size = run_ot(oldtokens, chars, max_number,interval, num_iter_max) # generate the best ot size
-    Gs = run_ot_write(oldtokens, chars, optimal_size, num_iter_max) # generate the optimal matrix based on the ot size
-    write_vocab(oldtokens, Gs, chars, vocab_file, threshold) #generate the vocabulary based on the optimal matrix
+    
+    if tekenizer == 'subword-nmt':
+        Gs = run_ot_write(oldtokens, chars, optimal_size, num_iter_max) # generate the optimal matrix based on the ot size
+        write_vocab(oldtokens, Gs, chars, vocab_file, threshold) #generate the vocabulary based on the optimal matrix
+        
     with open(size_file, 'w') as sw:
          sw.write(str(optimal_size)+"\n")
     #return optimal_size

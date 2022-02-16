@@ -16,31 +16,31 @@ def read_tokens(path, tokens={}, max_number_line=1e7, tokenizer='subword-nmt'): 
        tokens: return all tokens and their frequencies
     """
     with open(path, 'r') as sr:
-         lines = sr.readlines()
-         total_lines = min(len(lines), max_number_line)
-         total_lines = int(total_lines)
-         for i in range(total_lines):
-             line = lines[i]
-             items = line.split()
-             for item in items:
-                 if tokenizer == 'subword-nmt':
-                     special_tokens = "@@"
-                     if not item.endswith(special_tokens):
-                            if item+"</w>" not in tokens:
-                                 tokens[item+"</w>"] = 1
-                            else:
-                                 tokens[item+"</w>"] += 1
-                     else:
-                          if item not in tokens:
-                               tokens[item] = 1
-                          else:
-                               tokens[item] += 1
-                 elif tokenizer == 'sentencepiece':
+        lines = sr.readlines()
+        total_lines = min(len(lines), max_number_line)
+        total_lines = int(total_lines)
+        for i in range(total_lines):
+            line = lines[i]
+            items = line.split()
+            for item in items:
+                if tokenizer == 'subword-nmt':
+                    special_tokens = "@@"
+                    if not item.endswith(special_tokens):
+                        if item+"</w>" not in tokens:
+                            tokens[item+"</w>"] = 1
+                        else:
+                            tokens[item+"</w>"] += 1
+                    else:
+                        if item not in tokens:
+                            tokens[item] = 1
+                        else:
+                            tokens[item] += 1
+                elif tokenizer == 'sentencepiece':
                     if item not in tokens:
                         tokens[item] =1 
                     else:
                         tokens[item] += 1
-                 else:
+                else:
                     print("Errors: we only support subword-nmt and sentencepiece!")
     return tokens
 
@@ -57,20 +57,29 @@ def read_merge_code_frequency(path, tokens, min_number=1, tokenizer='subword-nmt
     """
     print("reading candidate tokens")
     with open(path, 'r') as sr:
-         lines = sr.readlines()
-         merge_dict = OrderedDict()
-         # for bpe codes, the first line shows code version
-         if tokenizer == 'subword-nmt':
-             lines = lines[1:] # the first line is version number
-         for line in tqdm(lines):
-             merge = line.strip()
-             items = merge.split(" ")
-             token = "".join(items)
-             merge_dict[merge] = min_number
-             for split_token in tokens:
-                 #merge_dict[merge] = min_number
-                 if token in split_token:
-                     merge_dict[merge] += tokens[split_token]
+        lines = sr.readlines()
+        merge_dict = OrderedDict()
+        # for bpe codes, the first line shows code version
+        if tokenizer == 'subword-nmt':
+            lines = lines[1:] # the first line is version number
+            for line in tqdm(lines):
+                merge = line.strip()
+                items = merge.split(" ")
+                token = "".join(items)
+                merge_dict[merge] = min_number
+                for split_token in tokens:
+                    #merge_dict[merge] = min_number
+                    if token in split_token:
+                        merge_dict[merge] += tokens[split_token]
+        if tokenizer == 'sentencepiece':
+            for line in tqdm(lines):
+                merge = line.strip()
+                token = merge.split("\t")[0]
+                merge_dict[token] = min_number
+                for split_token in tokens:
+                    #merge_dict[merge] = min_number
+                    if token in split_token:
+                        merge_dict[token] += tokens[split_token]
 
     return merge_dict
 
